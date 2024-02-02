@@ -1,0 +1,51 @@
+name: Copy Webspace Stage
+on:
+    workflow_dispatch:
+        inputs:
+            source-webspace:
+                type: choice
+                required: true
+                description: Vyberte webspace
+                options:
+                    - dnymarianne2023-02
+                    - dnymarianne2024-01
+            destination-webspace:
+                type: choice
+                required: true
+                description: Vyberte webspace
+                options:
+                    - dnymarianne2023-02
+                    - dnymarianne2024-01
+
+concurrency:
+    group: copy-webspace-stage
+    cancel-in-progress: true
+
+jobs:
+    greet:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Send greeting
+              run: echo "${{ github.event.inputs.source-webspace }} ${{ github.event.inputs.destination-webspace }}"
+#    cron:
+#        runs-on: [self-hosted, cron]
+#        environment: stage
+#        env:
+#            SERVER_USER: ${{vars.SERVER_USER}}
+#            SERVER_ADDRESS: ${{vars.SERVER_ADDRESS}}
+#            SERVER_PORT: ${{vars.SERVER_PORT}}
+#            SERVER_DESTINATION_HOME_LIVE_PATH: ${{vars.SERVER_DESTINATION_HOME_PATH}}/live
+#
+#        steps:
+#            - name: SSH commands
+#              uses: appleboy/ssh-action@v1.0.0
+#              with:
+#                  host: ${{env.SERVER_ADDRESS}}
+#                  port: ${{env.SERVER_PORT}}
+#                  username: ${{env.SERVER_USER}}
+#                  key: ${{secrets.SSH_PRIVATE_KEY}}
+#                  script_stop: true
+#                  script: |
+#                      cd ${{env.SERVER_DESTINATION_HOME_LIVE_PATH}} &&
+#                      php bin/drush cron
